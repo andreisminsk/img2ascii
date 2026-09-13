@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "img2ascii"
+version = "1.0.0"
+description = "Convert images to ASCII art and back to PNG"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+dependencies = [
+    "Pillow>=10.0",
+]
+
+[project.scripts]
+image2ascii = "img2ascii.image2ascii:main"
+ascii2png = "img2ascii.ascii2png:main"
+image2blocks = "img2ascii.image2blocks:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
