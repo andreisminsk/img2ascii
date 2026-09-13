@@ -186,6 +186,29 @@ The `tests/` directory contains sample outputs from `tests/original.png`:
 | `t11_blocks_invert.png` | Blocks, inverted |
 | `t12_blocks_fine.png` | Blocks with fine charset |
 
+## Wiring analysis
+
+You can analyze ASCII circuit diagrams using the image and text analysis tools. Convert the diagram to PNG first, then use image analysis (which handles visual layout well) or LLM text analysis for circuit correctness.
+
+### Example: Arduino LED blink circuit
+
+```bash
+# 1. Create or use an ASCII wiring diagram (e.g. arduino_wiring.txt)
+
+# 2. Convert to PNG
+ascii2png arduino_wiring.txt --mode text --fg "#00cc66" --bg "#1a1a2e" -o wiring.png
+
+# 3. Analyze the PNG with image analysis (gemma4:31b-cloud)
+#    - Identifies components, connections, labels
+#    - Reads pin names, resistor values, LED polarity
+
+# 4. Analyze the text with LLM for circuit correctness
+#    - Validates the circuit (complete loop, correct polarity, etc.)
+#    - Suggests improvements or flags issues
+```
+
+The image analysis model (`gemma4:31b-cloud`) can read component labels, trace wiring paths, and summarize the circuit. For deeper validation (e.g. "is this circuit correct?"), use `llm_query` with the text file and a system prompt like "You are an electronics engineer."
+
 ## Project structure
 
 ```
