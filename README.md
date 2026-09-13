@@ -209,6 +209,59 @@ ascii2png arduino_wiring.txt --mode text --fg "#00cc66" --bg "#1a1a2e" -o wiring
 
 The image analysis model (`gemma4:31b-cloud`) can read component labels, trace wiring paths, and summarize the circuit. For deeper validation (e.g. "is this circuit correct?"), use `llm_query` with the text file and a system prompt like "You are an electronics engineer."
 
+## Cloud model ASCII art recognition
+
+Tested 10 cloud models on their ability to recognize ASCII art from `image2ascii` output.
+
+### Test images
+
+| File | Subject |
+|------|---------|
+| `image1.txt` | A dog sitting, looking right |
+| `image2.txt` | A female portrait |
+
+### Results
+
+**image1.txt (dog sitting, looking right)**
+
+| Model | Answer | Verdict |
+|-------|--------|---------|
+| deepseek-v4-pro | Starry Night | ❌ |
+| deepseek-v4-flash | Couldn't identify | ❌ |
+| kimi-k2.6 | Couldn't identify | ❌ |
+| glm-5.1 | Landscape with tree, building, animal | ⚠️ partial |
+| gemma4:31b | Human face | ❌ |
+| qwen3.5:397b | Human face portrait | ❌ |
+| qwen3.5 | Human face | ❌ |
+| gpt-oss:120b | Mona Lisa | ❌ |
+| glm-5.2 | Timeout | — |
+| glm-5.3 | Timeout | — |
+
+**image2.txt (female portrait)**
+
+| Model | Answer | Verdict |
+|-------|--------|---------|
+| deepseek-v4-pro | Lion | ❌ |
+| deepseek-v4-flash | Couldn't identify | ❌ |
+| kimi-k2.6 | Lion | ❌ |
+| gemma4:31b | Lion/tiger face | ❌ |
+| qwen3.5:397b | Human face, likely woman | ✅ |
+| qwen3.5 | Human face | ⚠️ partial |
+| gpt-oss:120b | Lion/tiger | ❌ |
+| glm-5.2 | Timeout | — |
+| glm-5.3 | Timeout | — |
+
+### Key findings
+
+- **No model correctly identified the dog** in image1. Most defaulted to "human face" or couldn't identify it.
+- **qwen3.5:397b** was the only model to correctly identify image2 as a female portrait.
+- **glm-5.1** was the only model to detect an "animal" in image1, though it misidentified the overall scene.
+- **gemma4:31b** was the fastest model (1.4–6.6s) but misidentified both images.
+- **glm-5.2** and **glm-5.3** both timed out (300s).
+- 8 models from the original list are retired and unavailable.
+
+Full results are saved in `tests/cloud_model_results.json`.
+
 ## Project structure
 
 ```
